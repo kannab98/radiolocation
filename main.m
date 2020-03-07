@@ -1,27 +1,31 @@
+addpath('./scripts');
 tau = 100e-6; % 100 мкс  
 df = 3e6;     % 3 МГц
 step = (2*df)^-1;
-t = 0:step:tau;
+t = -tau/2:step:tau/2;
 
-y = sin(omega(t,df,tau) .* t );
-plot(t,y)
-
-spectrum = fft(y);
-Y1 = conv(y,y);
-Y1 = Y1(1:length(y));
-Y2 = ifft(spectrum .* spectrum);
-
-figure(2);
-clf();
-title('Функция корреляции')
-t1=tau:-step:0;
+figure(1); clf(); 
 hold on;
-plot(t1,Y1);
-plot(t1,Y2);
-legend('t-способ','f-способ')
+    a = 0;
+    plot(t,omega(t,df,tau,a));
+    a = 0.5;
+    plot(t,omega(t,df,tau,a));
 hold off;
 
+signal = exp(1i*omega(t,df,tau,a).* t );
+figure(2); clf(); plot(t,signal);
 
-function omega = omega(t,df,tau)
-    omega =  2*pi*df/tau * t;
-end
+spectrum = fft(signal);
+conv_time = conv(signal, conj(signal));
+conv_freq = ifft(spectrum .* conj(spectrum));
+
+conv_time = 20*log10(abs(conv_time));
+conv_freq = 20*log10(abs(conv_freq));
+figure(3); clf(); 
+hold on;
+     plot(conv_time);
+     plot(conv_freq);
+     legend('t','f')
+hold off
+
+
