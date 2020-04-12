@@ -1,0 +1,155 @@
+% Тип документа
+\documentclass[a4paper,14pt]{extarticle}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage[T2A]{fontenc}
+\usepackage
+    { % Дополнения Американского математического общества (AMS)
+        amssymb,
+        amsfonts,
+        amsmath,
+        amsthm,
+        % Пакет для физических текстов
+        physics,
+        color,
+        float,
+        ulem,
+        esint,
+        esdiff,
+        % 
+    } 
+    
+\usepackage{mathtools}
+\mathtoolsset{showonlyrefs=true} 
+
+\usepackage{xcolor}
+\usepackage{hyperref}
+ % Цвета для гиперссылок
+\definecolor{linkcolor}{HTML}{000000} % цвет ссылок
+\definecolor{urlcolor}{HTML}{799B03} % цвет гиперссылок
+ 
+\hypersetup{linkcolor=linkcolor,urlcolor=urlcolor,colorlinks=true}
+\hypersetup{citecolor=linkcolor}
+\hypersetup{pageanchor=false}
+
+% Увеличенный межстрочный интервал, французские пробелы
+\linespread{1.3} 
+\frenchspacing 
+
+\newcommand{\mean}[1]{\langle#1\rangle}
+\newcommand*{\const}{\mathrm{const}}
+\renewcommand*{\arctg}{arctg}
+%\renewcommand*{\kappa}{\kappa}
+\renewcommand*{\phi}{\varphi}
+
+\newcommand{\tK}{\widetilde K}
+%\renewcommand{\qty}{ }
+
+
+\begin{document}
+
+
+\section{Метод наименьших квадратов Прони}%
+\label{sec:metod_naimen_shikh_kvadratov_proni}
+\subsection{Матрица ковариации}%
+\label{sub:matritsa_kovariatsii}
+
+\begin{equation}
+    \label{eq:Rxx1}
+    R_{xx} = 
+        \begin{bmatrix}
+            r_{xx}[0] & r_{xx}^*[1] & \dots &  r_{xx}^*[n] \\
+            r_{xx}[1] & r_{xx}[0] & \dots &  r_{xx}^*[n-1] \\
+            \dots  & \dots    & \dots & \dots   \\ 
+            r_{xx}[p] & r_{xx}[p-1] & \dots &  r_{xx}^*[n-p] \\
+        \end{bmatrix}
+\end{equation}
+Можно обойтись без комплексного сопряжения, если учесть, что функция ковариации
+обладает следующим свойством $r_{xx}[-p] = r_{xx}^*[p]$.
+
+\begin{equation}
+    \label{eq:Rxx2}
+    R_{xx} = 
+        \begin{bmatrix}
+            r_{xx}[0] & r_{xx}[1] & \dots &  r_{xx}[-n] \\
+            r_{xx}[1] & r_{xx}[0] & \dots &  r_{xx}[-n+1] \\
+            \dots  & \dots    & \dots & \dots   \\ 
+            r_{xx}[p] & r_{xx}[p-1] & \dots &  r_{xx}[-n+p] \\
+        \end{bmatrix}
+\end{equation}
+
+Корреляция $r_{xx}$ вычисляется следующим образом, если индексс отсчитывать от
+единицы:
+\begin{equation}
+    \label{eq:rxx1}
+    r_{xx}[p] = \frac{1}{n-p+1} \sum\limits_{j=1}^{n-p} x[j+p] \cdot x^*[j]
+\end{equation}
+Или, если применять индексы $p<0$:
+\begin{equation}
+    \label{eq:rxx2}
+    r_{xx}[p] = \frac{1}{n - |p| + 1} \sum\limits_{j=1}^{n-|p|} x^*[j+|p|] \cdot x[j]
+\end{equation}
+
+Зная автокорреляционную матрицу, можно найти коэффициент авторегрессии, решая
+уравненния Юла-Уокера
+\begin{equation}
+    \label{eq:Rxx2}
+        \begin{pmatrix}
+            r_{xx}[0] & r_{xx}[-1] & \dots &  r_{xx}[-n] \\
+            r_{xx}[1] & r_{xx}[0] & \dots &  r_{xx}[-n+1] \\
+            \dots  & \dots    & \dots & \dots   \\ 
+            r_{xx}[p] & r_{xx}[p-1] & \dots &  r_{xx}[-n+p] \\
+        \end{pmatrix}
+        \cdot 
+        \begin{pmatrix}
+            1 \\
+            a_p[1]\\
+            \vdots\\
+            a_p[n]
+        \end{pmatrix}
+        =
+        \begin{pmatrix}
+            \rho_0 \\
+            0\\
+            \vdots\\
+            0
+        \end{pmatrix}
+\end{equation}
+
+\subsection{Оценка ошибки предсказания}%
+\label{sub:otsenka_oshibki_predskazaniia}
+
+
+Коэффициенты авторегрессии нужны для нахождения коэффициентов отражения $k_p$:
+\begin{equation}
+    \label{eq:kp}
+    k_p = - \frac{
+                \sum\limits_{n=1}^{\infty} a_{p-1}[n] r_{xx}[p-n]
+        }{
+                \rho_{p-1}
+        }, \text{ где}
+\end{equation}
+
+дисперсия (?) $\rho_p$ связана рекурсивным соотношением с $\rho_0 = r_{xx}[0]$
+\begin{equation}
+    \label{eq:}
+    \rho_p = \rho_{p-1} (1 - \abs{k_p}^2)
+\end{equation}
+
+Теперь можем найти ошибку предсказания вперед и назад
+\begin{align}
+    \label{eq:err-front}
+    e_p^f[n]  =  e_{p-1}^f[n]    + k_p e_{p-1}^b [n-1]\\
+    \label{eq:err-back}
+    e_p^b[n]  =  e_{p-1}^b[n-1]  + k_p^* e_{p-1}^f [n]\\
+\end{align}
+
+
+
+
+
+
+
+
+
+\end{document}
