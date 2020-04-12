@@ -1,8 +1,8 @@
 % x = test_function();
-N = 2;
+N = 4;
 T = 1/800; 
-A = 0.7;
-B = 0.;
+A = 0.0;
+B = 0.0;
 C = 4;
 x = A * rand(256,1);
 noise = x;
@@ -69,5 +69,5 @@ hold off;
 figure(2); clf(); hold on;
     plot(F,S)
     xlim([0,+C*N+2])
-%     ylim([0,max(S)+1])
+%   ylim([0,max(S)+1])
 hold off;
