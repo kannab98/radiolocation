@@ -35,7 +35,7 @@ alpha = log(abs(z))/T;
 f = atan( imag(z) ./ real(z) ) / (2 * pi * T);
  
 
-%%%%%% Этап 3  
+%%%%%% Этап 3 
 Z = zeros(p-1, p);
 for i=1:p
     for j=1:p
