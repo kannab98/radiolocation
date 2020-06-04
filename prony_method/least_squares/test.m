@@ -1,19 +1,19 @@
  %% —игнал и параметры модели
 A0 = 0.0;
-alpha0 = 0.01;
-x = A0 * rand(16,1);
+alpha0 = 0.001;
+x = A0 * rand(160,1);
 t = zeros(length(x),1);
-T = 0.125;
+T = 0.0125;
 for i=1:length(x)
     t(i,1) = (i-1)*T;
 end
 
 noise = x;
 f0 = 2;
-count_waves = 2;
+count_waves = 1;
 
 for j=1:length(x)
-    for n=1:count_waves-1
+    for n=1:count_waves
         x(j) = x(j) + exp(1i*2*pi*f0*n*T*(j-1)) * exp(alpha0*(j-1)*T); 
     end
 end
@@ -50,6 +50,7 @@ Z = zeros(p,p);
 % h = linsolve(Z,C)
 
 % Ѕолее коротка€ запись, по сравнению с блоком выше
+
 Z = zeros(N,p);
 for i=1:N
     for j=1:p
@@ -79,4 +80,5 @@ scatter(t, real(x), 'r+')
 plot(t, real(x))
 hold on
 plot(t, real(x1))
+legend('начальные данные', 'прони')
 hold off
