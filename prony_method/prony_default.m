@@ -1,9 +1,9 @@
   % x = test_function();
-N = 4;
-T = 1/800; 
+N = 2;
+T = 0.0125;
 A = 0.0;
 B = 0.0;
-C = 4;
+C = 2;
 x = A * rand(256,1);
 noise = x;
 for j=1:length(x)
