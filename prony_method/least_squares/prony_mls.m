@@ -10,8 +10,8 @@ for i=1:length(x)
 end
 
 noise = x;
-f0 = 2;
-count_waves = 2;
+f0 = 10;
+count_waves = 8;
 
 for j=1:length(x)
     for n=1:count_waves
@@ -22,7 +22,7 @@ end
 % T = 1;
 % x = test_function();
 N = length(x);
-p = 2;
+p = 32;
 %% Попытка учитывания известных компонент
 c = fliplr(poly(z0));
 y = zeros(p,1);
@@ -33,15 +33,7 @@ for n=p+1:2*p
     end
 end
 
-% % Составление тёплицевой матрицы сигнала
-% row = zeros(p+1,1);
-% col = zeros(p,1);
-% for i=1:p
-%     col(i) = x(p+i);
-% end
-% for i=1:p+1
-%     row(i) = x(p-i+2);
-% end
+
 %     
 % TT = toeplitz(col, row);
 % TTJ = conj(fliplr(TT));
@@ -53,7 +45,21 @@ end
 % a = [g(1:p);1;g(p+1:end)];
 % %% Вычисление матрицы ковариации (см. формулу (6) в документе)
 
-R_xx = corr_mat(x,p+1);
+% % Составление тёплицевой матрицы сигнала
+row = zeros(p+1,1);
+col = zeros(p,1);
+for i=1:p
+    col(i) = x(p+i);
+end
+for i=1:p+1
+    row(i) = x(p-i+2);
+end
+
+TT = toeplitz(col, row);
+
+R_xx = TT'*TT;
+% R_xx = corr_mat(x,p+1);
+
 R0 = R_xx(:,1);
 R_xx = R_xx(:,2:end);
 
@@ -98,7 +104,7 @@ figure(1); clf(); hold on;
 figure(2); clf(); hold on;
     plot(F,S1)
     plot(F,S2)
-    ylim([-10,1])
+    ylim([-40,1])
 hold off
 
 figure(3); clf(); hold on;
