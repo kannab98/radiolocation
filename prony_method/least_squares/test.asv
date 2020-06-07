@@ -1,0 +1,42 @@
+ %% Сигнал и параметры модели
+A0 = 1;
+alpha0 = -0;
+x = 0.0 * rand(30,1);
+t = zeros(length(x),1);
+T = 0.00125;
+
+for i=1:length(x)
+    t(i,1) = (i-1)*T;
+end
+
+noise = x;
+f0 = 2;
+count_waves = 1;
+
+for j=1:length(x)
+    for n=1:count_waves
+        x(j) = x(j) + A0*exp(1i*2*pi*f0*n*T*(j-1)) * exp(alpha0*(j-1)*T); 
+    end
+end
+
+%% 
+n = 20;
+X0 = [];
+
+p = 1;
+X = x_toepliz(x, p);
+rho = 1e-9;
+err = zeros(p+1);
+err(1) = rho;
+
+XX = conj(X')*X;
+
+a = linsolve(XX(:,2:end), err - XX(:,1));
+x1 = 0;
+
+for i=1:p
+    x1 = x1 - a(i) * x(n-i);
+end
+
+
+x1, x(n-1)
