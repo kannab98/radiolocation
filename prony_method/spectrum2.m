@@ -8,7 +8,11 @@ function S = spectrum2(F,T,p,alpha,h,f)
         for j=1:p
             z0 = z(F(i),0);
             zk = z(f(j),alpha(j));
-            X(i) = X(i) + h(j)/(1 - zk/z0 ) - h(j)/(1 - 1/conj(zk) * 1/z0 );
+            if abs(zk/z0 - 1) < 1e-6 
+                X(i) = X(i) + 1e6;
+            else
+                X(i) = X(i) + h(j)/(1 - zk/z0 ) - h(j)/(1 - 1/conj(zk) * 1/z0 );
+            end
         end
     end
     S = abs(X) .^ 2;
