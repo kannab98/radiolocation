@@ -1,7 +1,7 @@
  %% Сигнал и параметры модели
 A0 = 1;
 alpha0 = -1.1;
-x = 0.5* rand(560,1);
+x = 0.* rand(560,1);
 t = zeros(length(x),1);
 T = 0.00125;
 
@@ -11,7 +11,7 @@ end
 
 noise = x;
 f0 = 10;
-count_waves = 1
+count_waves = 3
 
 for j=1:length(x)
     for n=1:count_waves
@@ -22,7 +22,7 @@ end
 % T = 1;
 % x = test_function();
 N = length(x);
-p = 8
+p = 16
 %% Попытка учитывания известных компонент
 % z0 = [A0*exp(1i*2*pi*2*f0*T);];
 % z0 = [];
@@ -73,7 +73,7 @@ TT = toeplitz(col, row);
 
 R_xx = TT'*TT;
 
-%% Учет экспоненциальных компонент
+
 % [U, V] = eig(R_xx);
 % V = diag(V);
 % [V, argsort] = sort(V);
@@ -86,11 +86,11 @@ R_xx = TT'*TT;
 % end
 
 [U,S,V] = svd(R_xx);
-m = 2;
+m = 4;
 S = diag(S);
-R_xx = zeros(p+1,p+1);
+R_xx0 = zeros(p+1,p+1);
 for i=1:m
-    R_xx = R_xx + S(i)*U(:,i)*V(:,i)';
+    R_xx0 = R_xx0 + S(i)*U(:,argsort(i))*V(:,argsort(i))';
 end
 
 
